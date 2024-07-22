@@ -138,35 +138,23 @@ class Operate:
 
     # keyboard teleoperation        
     def update_keyboard(self):
-        global multiplier
         for event in pygame.event.get():
-            ############### add your codes below ###############
-            # drive forward
             if event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
                 self.command['motion'] = [1,0]
-                multiplier = 1
-            # drive backward
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-                self.command['motion'][0] = [-1,0]
-                multiplier = -1
-            # turn left
+                self.command['motion'] = [-1,0]
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
                 self.command['motion'] = [0, 1]
-            # drive right
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
                 self.command['motion'] = [0, -1]
-            # stop
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.command['motion'] = [0, 0]
-            # save image
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_i:
                 self.command['save_image'] = True
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_EQUALS:
-                self.command['motion'][0] += multiplier
+                self.command['motion'] = [i + np.sign(i) for i in self.command['motion']]
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_MINUS:
-                self.command['motion'][0] -= multiplier
-
-
+                self.command['motion'] = [i - np.sign(i) for i in self.command['motion']]
             elif event.type == pygame.QUIT:
                 self.quit = True
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -176,7 +164,6 @@ class Operate:
                 pygame.quit()
                 sys.exit()
 
-        
 if __name__ == "__main__":
     import argparse
 
@@ -206,8 +193,6 @@ if __name__ == "__main__":
 
     start = False
 
-    multiplier = 1
-
     counter = 40
     while not start:
         for event in pygame.event.get():
@@ -230,7 +215,6 @@ if __name__ == "__main__":
         # visualise
         operate.draw(canvas)
         pygame.display.update()
-
 
 
 
